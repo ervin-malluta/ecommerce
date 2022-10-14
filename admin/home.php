@@ -58,13 +58,18 @@
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
               <?php
-                $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN products ON products.id=details.product_id");
-                $stmt->execute();
 
+                $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN products ON products.id = details.product_id 
+                              where products.owner_id = :id ");
+                if($admin["id"] == 1){
+                  $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN products ON products.id = details.product_id");
+                  $stmt->execute();
+                }else{
+                  $stmt->execute(['id'=>$admin["id"]]);
+                }
                 $total = 0;
                 foreach($stmt as $srow){
                   $subtotal = $srow['price']*$srow['quantity'];
@@ -78,7 +83,7 @@
             <div class="icon">
               <i class="fa fa-shopping-cart"></i>
             </div>
-            <a href="book.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="#sales_container" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -87,8 +92,14 @@
           <div class="small-box bg-green">
             <div class="inner">
               <?php
-                $stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM products");
-                $stmt->execute();
+                $stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM products where products.owner_id = :id ");
+                if($admin["id"] == 1){
+                  $stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM products");
+                  $stmt->execute();
+                }else{
+                  $stmt->execute(['id'=>$admin["id"]]);
+                }
+                
                 $prow =  $stmt->fetch();
 
                 echo "<h3>".$prow['numrows']."</h3>";
@@ -99,38 +110,46 @@
             <div class="icon">
               <i class="fa fa-barcode"></i>
             </div>
-            <a href="student.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="products.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-yellow">
-            <div class="inner">
-              <?php
-                $stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM users");
-                $stmt->execute();
-                $urow =  $stmt->fetch();
-
-                echo "<h3>".$urow['numrows']."</h3>";
-              ?>
-             
-              <p>Number of Users</p>
-            </div>
-            <div class="icon">
-              <i class="fa fa-users"></i>
-            </div>
-            <a href="return.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
+        <?php
+          if($admin["id"] == 1){
+            $stmt = $conn->prepare("SELECT *, COUNT(*) AS numrows FROM users");
+                    $stmt->execute();
+                    $urow =  $stmt->fetch();
+            echo "<div class='col-lg-3 col-xs-6'>
+              <div class='small-box bg-yellow'>
+                <div class='inner'>
+                  <h3>".$urow['numrows']."</h3>
+                  <p>Number of Users</p>
+                </div>
+                <div class='icon'>
+                  <i class='fa fa-users'></i>
+                </div>
+                <a href='users.php' class='small-box-footer'>More info <i class='fa fa-arrow-circle-right'></i></a>
+              </div>
+            </div>";
+          }
+        ?>
+        
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
           <div class="small-box bg-red">
             <div class="inner">
               <?php
-                $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN sales ON sales.id=details.sales_id LEFT JOIN products ON products.id=details.product_id WHERE sales_date=:sales_date");
-                $stmt->execute(['sales_date'=>$today]);
+
+                $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN sales ON sales.id=details.sales_id 
+                LEFT JOIN products ON products.id=details.product_id WHERE sales_date=:sales_date and products.owner_id = :id");
+                if($admin["id"] == 1){
+                  $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN sales ON sales.id=details.sales_id 
+                    LEFT JOIN products ON products.id=details.product_id WHERE sales_date=:sales_date ");
+                  $stmt->execute(['sales_date'=>$today]);
+                }else{
+                  $stmt->execute(['id'=>$admin["id"], 'sales_date'=>$today]);
+                }
 
                 $total = 0;
                 foreach($stmt as $trow){
@@ -147,13 +166,13 @@
             <div class="icon">
               <i class="fa fa-money"></i>
             </div>
-            <a href="borrow.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="#sales_container" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
       </div>
       <!-- /.row -->
-      <div class="row">
+      <div class="row" id="sales_container">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
@@ -201,8 +220,18 @@
   $sales = array();
   for( $m = 1; $m <= 12; $m++ ) {
     try{
-      $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN sales ON sales.id=details.sales_id LEFT JOIN products ON products.id=details.product_id WHERE MONTH(sales_date)=:month AND YEAR(sales_date)=:year");
-      $stmt->execute(['month'=>$m, 'year'=>$year]);
+      $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN sales ON sales.id=details.sales_id LEFT JOIN products
+             ON products.id=details.product_id WHERE MONTH(sales_date)=:month AND YEAR(sales_date)=:year AND products.owner_id = :id");
+
+
+      if($admin["id"] == 1){
+        $stmt = $conn->prepare("SELECT * FROM details LEFT JOIN sales ON sales.id=details.sales_id LEFT JOIN products
+             ON products.id=details.product_id WHERE MONTH(sales_date)=:month AND YEAR(sales_date)=:year");
+        $stmt->execute(['month'=>$m, 'year'=>$year]);
+      }else{
+        $stmt->execute(['id'=>$admin["id"], 'month'=>$m, 'year'=>$year]);
+      }
+
       $total = 0;
       foreach($stmt as $srow){
         $subtotal = $srow['price']*$srow['quantity'];

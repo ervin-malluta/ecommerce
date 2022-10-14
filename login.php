@@ -1,7 +1,7 @@
 <?php include 'includes/session.php'; ?>
 <?php
   if(isset($_SESSION['user'])){
-    header('location: cart_view.php');
+    header('location: index.php');
   }
 ?>
 <?php include 'includes/header.php'; ?>
@@ -37,11 +37,25 @@
             <input type="password" class="form-control" name="password" placeholder="Password" required>
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
           </div>
-      		<div class="row">
-    			<div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
           			<button type="submit" class="btn btn-primary btn-block btn-flat" name="login"><i class="fa fa-sign-in"></i> Sign In</button>
         		</div>
-      		</div>
+            <div class="col-xs-5 border-primary">
+              
+                <fieldset id="type">
+                  <input class="form-check-input" checked type="radio" value="buyer" name="type">
+                  <label class="form-check-label" for="inlineCheckbox1">Buyer</label>
+
+                  <input class="form-check-input" type="radio" value="seller" name="type">
+                  <label class="form-check-label" for="inlineCheckbox2">Seller</label>
+                </fieldset>
+              
+            </div>
+          
+
+          </div>
+      		
     	</form>
       <br>
       <a href="password_forgot.php">I forgot my password</a><br>
