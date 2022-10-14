@@ -99,6 +99,12 @@
 
                     try{
                       $now = date('Y-m-d');
+                      if($admin["id"] != 1 && !isset($_GET['category'])){
+                          $where .= "  WHERE owner_id = " . $admin["id"];
+                      }
+                      if($admin["id"] != 1 && isset($_GET['category'])){
+                        $where .= "  AND owner_id = " . $admin["id"];
+                      }
                       $stmt = $conn->prepare("SELECT * FROM products $where");
                       $stmt->execute();
                       foreach($stmt as $row){
