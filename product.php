@@ -74,7 +74,7 @@
 		            		</form>
 		            	</div>
 		            	<div class="col-sm-6">
-							<div class="row d-flex">
+							<div class="row">
 		            			<h1 class="page-header"><?php echo $product['prodname']; ?></h1>
 								<input type="hidden" name="product_id" value = ''>
 								<?php
@@ -116,8 +116,57 @@
 		            		<p><b>Description:</b></p>
 		            		<p><?php echo $product['description']; ?></p>
 		            	</div>
+						
 		            </div>
-		            <br>
+					<br>
+					<div class="row" >
+						<?php
+							if(isset($_SESSION['error'])){
+								echo "
+								<div class=' callout callout-danger text-center'>
+									<p>".$_SESSION['error']."</p> 
+								</div>
+								";
+								unset($_SESSION['error']);
+							}
+						?>
+						<h1>Add you review</h1>
+						<form action="add_review.php" method="POST">
+							<?php
+								echo "<input type='hidden' name='product_id' value=".$product['prodid'].">";
+							?>
+							<textarea required name="comment" id="comment" cols="110" rows="10"></textarea>
+							<br>
+							<button class="btn btn-primary" type="submit">Add Review</button>
+						</form>
+					</div>
+					<br/>
+					<div class="row">
+						<?php
+							$stmt = $conn->prepare("SELECT review.*, users.firstname, users.lastname
+											 from review INNER JOIN users on user_id = users.id where product_id = :prodid");
+						    $stmt->execute(["prodid" => $product['prodid']]);
+						    foreach ($stmt as $row) {
+								echo"
+									<div class='col-sm-10'>
+									<div class='box box-solid'>
+										<div class='box-header with-border'>
+											<h3 class='box-title'><b>".$row['firstname']." ".$row['lastname'] ."</b></h3>
+										</div>
+										<div class='box-body'>
+											<p>".$row['comment']."</p>
+											<h4>".$row['created_on']."</h4>	
+
+										</div>
+									</div>
+								</div>
+								
+								";
+							
+							}
+						
+						?>
+					</div>
 				    <div class="fb-comments" data-href="http://localhost/ecommerce/product.php?product=<?php echo $slug; ?>" data-numposts="10" width="100%"></div> 
 	        	</div>
 	        	<div class="col-sm-3">
