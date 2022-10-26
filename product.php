@@ -87,9 +87,12 @@
 										$stmt->execute(['product_id'=>$product_id, 'user_id'=>$user_id]);
 										$row = $stmt->fetch();
 										$count = $row['count'];
+										$favorites_text = "Add to favorites";
 										$color = 'btn-primary';
 										if($count){
 											$color = 'btn-warning';
+											$favorites_text = "Remove from favorites";
+
 										}
 										echo "<form action='add_to_favorite.php' method='POST'>
 										<input type='hidden' value='". $product['prodid'] . "' name='product_id'>
@@ -104,7 +107,7 @@
 												   0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 
 												   2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906
 												    2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z'/>
-											</svg>Add to favorites
+											</svg>".$favorites_text."
 										</button>
 									</form>";
 									}
