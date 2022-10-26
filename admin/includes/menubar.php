@@ -25,6 +25,7 @@
       <?php
         if($admin["id"] == 1){
           echo "<li><a href='users.php'><i class='fa fa-users'></i> <span>Users</span></a></li>";
+          echo "<li><a href='messages.php'><i class='fa fa-envelope'></i> <span>Messages</span></a></li>";
         }
       ?>
       <li class="treeview">

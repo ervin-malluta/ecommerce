@@ -17,7 +17,7 @@
                         Values(:name, :email, :subject, :message)");
             $stmt->execute(['name'=>$name, 'email'=>$email,'subject'=>$subject,'message'=>$message]);
             
-            $_SESSION['message_success'] = "Thank you for your feed back";
+            $_SESSION['message_success'] = "Thank you for your feed back. We will email you soon.";
             $pdo->close();
             header('location: contact.php');
   
