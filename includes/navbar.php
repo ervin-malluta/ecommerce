@@ -67,10 +67,28 @@
               <li class="footer"><a href="cart_view.php">Go to Cart</a></li>
             </ul>
           </li>
+          
           <?php
             if(isset($_SESSION['user'])){
+              $user_id = $_SESSION['user'];
               $image = (!empty($user['photo'])) ? 'images/'.$user['photo'] : 'images/profile.jpg';
+              $favorites_count = '';
+              try{
+                $stmt = $conn->prepare("SELECT products.id from products inner join favorites on product_id = products.id where user_id = :user_id  ");
+						    $stmt->execute(['user_id' => $user_id]);
+                $favorites_count = $stmt->rowCount();
+              }
+              catch(PDOException $e){
+                echo "There is some problem in connection: " . $e->getMessage();
+              }
               echo '
+                <li >
+                  <a href="favorites.php" >
+                    <i class="fa fa-star"></i>
+                     <span class="label label-success">'.$favorites_count.'</span>
+
+                  </a>
+                </li>
                 <li class="dropdown user user-menu">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <img src="'.$image.'" class="user-image" alt="User Image">
