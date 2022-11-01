@@ -40,7 +40,7 @@
 			        $mail->Host = 'smtp.gmail.com';                      
 			        $mail->SMTPAuth = true;                               
 			        $mail->Username = 'ervinmalluta2@gmail.com';     
-			        $mail->Password = 'Programuesi2';                    
+			        $mail->Password = 'yobvmchwxotmitoh';                    
 			        $mail->SMTPOptions = array(
 			            'ssl' => array(
 			            'verify_peer' => false,
