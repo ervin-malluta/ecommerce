@@ -1,6 +1,7 @@
 <?php
 	use PHPMailer\PHPMailer\PHPMailer;
 	use PHPMailer\PHPMailer\Exception;
+	require 'C:\xampp\composer\vendor\autoload.php';
 
 	include 'includes/session.php';
 
@@ -38,8 +39,8 @@
 			        $mail->isSMTP();                                     
 			        $mail->Host = 'smtp.gmail.com';                      
 			        $mail->SMTPAuth = true;                               
-			        $mail->Username = 'testsourcecodester@gmail.com';     
-			        $mail->Password = 'mysourcepass';                    
+			        $mail->Username = 'ervinmalluta2@gmail.com';     
+			        $mail->Password = 'Programuesi2';                    
 			        $mail->SMTPOptions = array(
 			            'ssl' => array(
 			            'verify_peer' => false,
@@ -50,11 +51,11 @@
 			        $mail->SMTPSecure = 'ssl';                           
 			        $mail->Port = 465;                                   
 
-			        $mail->setFrom('testsourcecodester@gmail.com');
+			        $mail->setFrom('ervinmalluta2@gmail.com');
 			        
 			        //Recipients
 			        $mail->addAddress($email);              
-			        $mail->addReplyTo('testsourcecodester@gmail.com');
+			        $mail->addReplyTo('ervinmalluta2@gmail.com');
 			       
 			        //Content
 			        $mail->isHTML(true);                                  
