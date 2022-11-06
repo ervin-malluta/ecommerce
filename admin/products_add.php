@@ -30,8 +30,11 @@
 			}
 
 			try{
-				$stmt = $conn->prepare("INSERT INTO products (category_id, name, description, slug, price, photo) VALUES (:category, :name, :description, :slug, :price, :photo)");
-				$stmt->execute(['category'=>$category, 'name'=>$name, 'description'=>$description, 'slug'=>$slug, 'price'=>$price, 'photo'=>$new_filename]);
+				if(!isset($_SESSION['admin'])){
+					throw new PDOException("Error Processing Request", 1);
+				}
+				$stmt = $conn->prepare("INSERT INTO products (category_id, name, description, slug, price, photo, owner_id) VALUES (:category, :name, :description, :slug, :price, :photo, :owner)");
+				$stmt->execute(['category'=>$category, 'name'=>$name, 'description'=>$description, 'slug'=>$slug, 'price'=>$price, 'photo'=>$new_filename, "owner"=>$_SESSION['admin']]);
 				$_SESSION['success'] = 'User added successfully';
 
 			}
